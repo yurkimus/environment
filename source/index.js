@@ -1,10 +1,14 @@
 import { is } from '@yurkimus/types'
 
-let Strategy = {
+export let Strategy = /** @type {const} */ ({
   Deno: 'Deno',
   Node: 'Node',
-}
+})
 
+/**
+ * @param {keyof typeof Strategy} strategy
+ * @param {string[]} variables
+ */
 export let verify = (strategy, variables) => {
   if (!is('String', strategy))
     throw new TypeError(`Parameter 'strategy' must be of String type.`)
@@ -20,18 +24,16 @@ export let verify = (strategy, variables) => {
 
   switch (strategy) {
     case Strategy.Deno:
-      return variables => {
-        for (let variable of variables)
-          if (!Deno.env.has(variable))
-            throw new TypeError(`Variable '${variable}' must be specified.`)
-      }
+      for (let variable of variables)
+        if (!Deno.env.has(variable))
+          throw new TypeError(`Variable '${variable}' must be specified.`)
+      break
 
     case Strategy.Node:
-      return variables => {
-        for (let variable of variables)
-          if (!(variable in process.env))
-            throw new TypeError(`Variable '${variable}' must be specified.`)
-      }
+      for (let variable of variables)
+        if (!(variable in process.env))
+          throw new TypeError(`Variable '${variable}' must be specified.`)
+      break
 
     default:
       throw new TypeError(`No strategy '${strategy}' predicate found.`)
