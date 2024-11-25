@@ -1,6 +1,6 @@
 # Environment
 
-Utility to verify all the environment keys are exists.
+Utility to verify that all environment keys exist.
 
 ## Exports
 
